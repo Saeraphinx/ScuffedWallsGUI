@@ -8,45 +8,54 @@ public class ScuffedFile {
         SWFile = new File(diffString);
     }
 
-    public void importDiff() {
+    public ArrayList<ScuffedEvent> importDiff() {
         ArrayList<ScuffedEvent> eventList = new ArrayList<ScuffedEvent>();
-
-        Scanner in = new Scanner(SWFile);
+        Scanner in;
+        try {
+            in = new Scanner(SWFile);
+        } catch (Exception e) {
+            System.out.print("Well you done goofed");
+            return new ArrayList<ScuffedEvent>();
+        }
 
         int currentEventCount = -1;
-        while(in.hasNextLine()) {
-            /*
-             *  TODO:
-             *   Deal with empty lines
-             *   Deal with Hashtags
-             */ 
-            String currentLine = in.nextLine(); 
-            if(currentLine.substring(0,2).equals("\"")) {
+        while(in.hasNext()) {
+            String currentLine = in.nextLine();
+            if (currentLine.equals("") || currentLine.substring(0,1).equals("#")) {
+                continue;
+            }
+            
+            if(currentLine.substring(0,1).matches("\\d+")) { // read Event Header
+                eventList.add(new ScuffedEvent(readBeat(currentLine), readType(currentLine)));
+                currentEventCount++;
                 continue;
             }
 
-            if(currentLine.substring(0,1).matches("\\d+")) {
-                eventList.add(new ScuffedEvent(readBeat(currentLine), readType(currentLine)));
-                currentEventCount++;
+            if (currentLine.substring(0,1).equals(" ")) { // read eventData
+                ScuffedEvent temp = eventList.get(currentEventCount);
+                temp.addScuffedEventData(readDataType(currentLine), readDataData(currentLine));
+                continue;
             }
-
-            if (currentLine.substring(0,1).equals(" ")) {
-                eventList.get(currentEventCount).addScuffedEventData(readDataType(currentLine), readDataData(currentLine));
-            }
-
+        
         }
+
+        in.close();
+        return eventList;
     }
 
-    private int readBeat(String line) {
+    private double readBeat(String line) {
         String temp = line;
         temp = temp.trim();
-        return Integer.parseInt(temp.substring(0,temp.indexOf(":")));
+        return Double.parseDouble(temp.substring(0,temp.indexOf(":")));
     }
 
     private String readType(String line) {
         String temp = line;
         temp = temp.trim();
-        // Deal with hashtags
+        int check = temp.indexOf("#");
+        if(check != -1) {
+            temp = temp.substring(0,check);
+        }
         return temp.substring(temp.indexOf(":")+1);
     }
 
@@ -59,8 +68,12 @@ public class ScuffedFile {
     private String readDataData(String line) {
         String temp = line;
         temp = temp.trim();
-        //deal with hastags
-        return temp.substring(temp.indexOf(":")+1);
+        temp = temp.substring(temp.indexOf(":")+1);
+        int check = temp.indexOf("#");
+        if(check != -1) {
+            temp = temp.substring(0,check);
+        }
+        return temp;
     }
 
 }

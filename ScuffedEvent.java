@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 
 public class ScuffedEvent {
-    private int beat;
+    private double beat;
     private String eventType;
     private ArrayList<String[]> eventData;
 
-    public ScuffedEvent(int beat, String eventType) {
+    public ScuffedEvent(double beat, String eventType) {
         this.beat = beat;
         this.eventType = eventType;
+        eventData = new ArrayList<String[]>();
     }
 
     public void setScuffedEventHeader(int beat, String eventType) {
@@ -22,5 +23,17 @@ public class ScuffedEvent {
     public void addScuffedEventData(String type, String data) {
         String[] tempData = {type, data};
         eventData.add(tempData);
+    }
+
+    public double getBeat() {
+        return beat;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public ArrayList<String[]> getEventData() {
+        return eventData;
     }
 }
