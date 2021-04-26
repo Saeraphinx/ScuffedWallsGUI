@@ -2,10 +2,24 @@ import java.io.*;
 import java.util.*;
 
 public class ScuffedFile {
+    private String filePath;
     private File SWFile;
 
     public ScuffedFile(String diffString) {
         SWFile = new File(diffString);
+        filePath = diffString;
+    }
+
+    public boolean isValid(){
+        if(SWFile.isFile() && SWFile.canExecute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getFileName() {
+        return SWFile.getName();
     }
 
     public ArrayList<ScuffedEvent> importDiff() {
