@@ -4,14 +4,48 @@ import java.util.*;
 public class ScuffedFile {
     private String filePath;
     private File SWFile;
+    private int numEvents, numData;
 
     public ScuffedFile(String diffString) {
         SWFile = new File(diffString);
         filePath = diffString;
+        if (isValid()) {
+            countEvents();
+        }
+    }
+
+    public void countEvents() {
+        Scanner in;
+        try {
+            in = new Scanner(SWFile);
+        } catch (Exception e) {
+            System.out.print("Well you done goofed");
+            return;
+        }
+
+        numEvents = 0; numData = 0;
+        while(in.hasNext()) {
+            String currentLine = in.nextLine();
+            if (currentLine.equals("") || currentLine.substring(0,1).equals("#")) {
+                continue;
+            }
+            
+            if(currentLine.substring(0,1).matches("\\d+")) { // read Event Header
+                numEvents++;
+                continue;
+            }
+
+            if (currentLine.substring(0,1).equals(" ")) { // read eventData
+                numData++;
+                continue;
+            }
+        
+        }
+        in.close();
     }
 
     public boolean isValid(){
-        if(SWFile.isFile() && SWFile.canExecute()) {
+        if(SWFile.isFile() && SWFile.canRead()) {
             return true;
         } else {
             return false;
