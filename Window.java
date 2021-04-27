@@ -115,7 +115,7 @@ public class Window extends JFrame implements ActionListener {
         eventSel.setBounds(20, 20, 200, 480);
         eventSel.setBackground(new Color(50,50,50));
         eventSel.setForeground(Color.WHITE);
-
+        //this does not work
         eventSel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         eventSel.setLayoutOrientation(JList.VERTICAL);
 
