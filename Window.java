@@ -88,7 +88,7 @@ public class Window extends JFrame implements ActionListener {
         importButton.addActionListener(this);
         importButton.setEnabled(false);
 
-        importButton.setBackground(new Color(0,0,0));
+        importButton.setBackground(new Color(50,50,50));
         eventSel.setBackground(new Color(50,50,50));
         frame.add(importButton);
         frame.add(eventSel);
@@ -97,7 +97,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Load Events into Sidebar List
      */
-    private void loadEventsIntoList() {
+    private void loadEventsFromFileIntoList() {
         frame.remove(eventSel);
         eventSelList = null;
         eventSel = null;
@@ -120,6 +120,8 @@ public class Window extends JFrame implements ActionListener {
         eventSel.setLayoutOrientation(JList.VERTICAL);
 
         frame.add(eventSel);
+
+        // TODO: add in auto-select - need to make it actually display
     }
 
     /*
@@ -151,7 +153,7 @@ public class Window extends JFrame implements ActionListener {
                 reloadStatusBar();
             }
         } else if (e.getSource() == importButton) {
-            loadEventsIntoList();
+            loadEventsFromFileIntoList();
         }
     }
 
